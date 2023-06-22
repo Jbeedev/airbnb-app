@@ -3,9 +3,16 @@
 import { IoMdClose } from "react-icons/io";
 
 import { useCallback, useState, useEffect } from "react";
-import Button from "../Button";
+import Button from "@/components/Button";
 
-type ModalProps = {
+// type SecondaryActionType = (() => void) | undefined;
+
+// interface YourComponentProps {
+//   secondaryAction: SecondaryActionType;
+//   other props...
+// }
+
+interface ModalProps {
   isOpen?: boolean;
   onClose: () => void;
   onSubmit: () => void;
@@ -13,12 +20,12 @@ type ModalProps = {
   body?: React.ReactElement;
   footer?: React.ReactElement;
   actionLabel: string;
-  disabled: boolean;
-  secondaryAction?: () => void;
+  disabled?: boolean;
+  secondaryAction?: () => void | undefined;
   secondaryActionLabel?: string;
 };
 
-const Modal = ({
+const Modal: React.FC<ModalProps> =  ({
   isOpen,
   onClose,
   onSubmit,
@@ -29,7 +36,7 @@ const Modal = ({
   disabled,
   secondaryAction,
   secondaryActionLabel,
-}: ModalProps) => {
+}) => {
   const [showModal, setShowModal] = useState(isOpen);
 
   useEffect(() => {
@@ -54,6 +61,8 @@ const Modal = ({
 
   const handleSecondaryAction = useCallback(() => {
     if (disabled || !secondaryAction) return;
+
+    secondaryAction();
   }, [disabled, secondaryAction]);
 
   if (!isOpen) return null;
